@@ -11,6 +11,9 @@ Iniciar uma aplicação back-end em C#, consumindo a API do Pokémon. Desenvolve
 ### Dia 2
 Parsear a resposta obtida no primeiro dia para extrair as informações desse JSON e exibi-las de maneira organizada.
 
+### Dia 3
+Trabalhar a saída de dados através da construção de um menu interativo, com opções e mensagens divertidas para o usuário.
+
 ## Tecnologias Utilizadas
 - C#
 - API do Pokémon
