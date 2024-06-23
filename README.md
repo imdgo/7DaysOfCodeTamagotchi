@@ -14,6 +14,9 @@ Parsear a resposta obtida no primeiro dia para extrair as informações desse JS
 ### Dia 3
 Trabalhar a saída de dados através da construção de um menu interativo, com opções e mensagens divertidas para o usuário.
 
+### Dia 4
+Refatorar o sistema para ficar de acordo com o padrão MVC, com Model, View e Controller.
+
 ## Tecnologias Utilizadas
 - C#
 - API do Pokémon
