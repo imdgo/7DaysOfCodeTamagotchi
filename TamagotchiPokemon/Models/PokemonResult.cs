@@ -1,4 +1,4 @@
-﻿namespace Tamagotchi
+﻿namespace TamagotchiPokemon.Models
 {
     public class PokemonResult
     {
