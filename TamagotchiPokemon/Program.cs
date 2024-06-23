@@ -1,14 +1,13 @@
-﻿using System;
-using RestSharp;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Tamagotchi;
+﻿using TamagotchiPokemon.Controllers;
 
-public class Program
+namespace TamagotchiPokemon
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        Menu menu = new Menu();
-        menu.Run();
+        public static void Main(string[] args)
+        {
+            TamagotchiController menu = new();
+            menu.Play();
+        }
     }
 }
