@@ -17,6 +17,9 @@ Trabalhar a saída de dados através da construção de um menu interativo, com 
 ### Dia 4
 Refatorar o sistema para ficar de acordo com o padrão MVC, com Model, View e Controller.
 
+### Dia 5
+Desenvolver interações do jogador com seus mascotes. Lidar com atributos e poder realmente brincar com seus pokémons.
+
 ## Tecnologias Utilizadas
 - C#
 - API do Pokémon
