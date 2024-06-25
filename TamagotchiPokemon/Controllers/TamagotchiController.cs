@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TamagotchiPokemon.DTOs;
 using TamagotchiPokemon.Models;
 using TamagotchiPokemon.Service;
 using TamagotchiPokemon.Views;
@@ -13,85 +8,168 @@ namespace TamagotchiPokemon.Controllers
 {
     public class TamagotchiController
     {
-        #region CTOR
-        private readonly List<PokemonDetailsResult> adoptedMascots;
-        private readonly TamagotchiView menu;
+        #region Fields
+
+        private readonly List<TamagotchiDTO> _adoptedPets;
+        private readonly TamagotchiView _tamagotchiView;
         private readonly PokemonApiService pokemonApiService;
         private readonly List<PokemonResult> speciesAvailable;
 
+        #endregion
+
+        #region Constructor
 
         public TamagotchiController()
         {
-            menu = new TamagotchiView();
+            _tamagotchiView = new TamagotchiView();
             pokemonApiService = new PokemonApiService();
 
             speciesAvailable = pokemonApiService.GetPokemonSpecies();
-            adoptedMascots = [];
-
+            _adoptedPets = new List<TamagotchiDTO>();
         }
 
         #endregion
 
+        #region Public Methods
+
         public void Play()
         {
-            menu.ShowMsgWelcomeUser();
-
+            _tamagotchiView.ShowMsgWelcomeUser();
 
             while (true)
             {
-                menu.ShowMainMenu();
-                int choice = menu.GetPlayerChoice();
-                PokemonDetailsResult pokemonDetails;
-                int pokemon;
+                _tamagotchiView.ShowMainMenu();
+                var choice = _tamagotchiView.GetPlayerChoice();
 
-                switch (choice)
+                try
                 {
+                    switch (choice)
+                    {
+                        case 1:
+                            HandleAdoptionMenu();
+                            break;
+                        case 2:
+                            HandleInteractionMenu();
+                            break;
+                        case 3:
+                            ExitGame();
+                            return;
+                        default:
+                            Console.WriteLine("Opção inválida. Tente novamente.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ocorreu um erro: {ex.Message}");
+                }
+            }
+        }
 
+        #endregion
+
+        #region Private Methods
+
+        private void HandleAdoptionMenu()
+        {
+            _tamagotchiView.ShowAdoptionMenu();
+            var choice = _tamagotchiView.GetPlayerChoice();
+
+            switch (choice)
+            {
+                case 1:
+                    _tamagotchiView.ShowSpeciesAvailable(speciesAvailable);
+                    break;
+                case 2:
+                    ShowPokemonDetails();
+                    break;
+                case 3:
+                    AdoptPokemon();
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }
+
+        private void HandleInteractionMenu()
+        {
+            if (_adoptedPets.Count == 0)
+            {
+                Console.WriteLine("Você ainda não adotou nenhum Pokémon.");
+                return;
+            }
+
+            Console.WriteLine("Escolha um mascote para interagir:");
+            for (int i = 0; i < _adoptedPets.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_adoptedPets[i].Name}");
+            }
+
+            int petIndex = _tamagotchiView.GetPlayerChoice(_adoptedPets.Count) - 1;
+            var chosenPet = _adoptedPets[petIndex];
+
+            bool exitMenu = false;
+
+            while (!exitMenu)
+            {
+                _tamagotchiView.ShowInteractionMenu();
+                int interactionOption = _tamagotchiView.GetPlayerChoice(4);
+
+                switch (interactionOption)
+                {
                     case 1:
-                        menu.ShowAdoptionMenu();
-                        choice = menu.GetPlayerChoice();
-
-                        switch (choice)
-                        {
-                            case 1:
-                                menu.ShowSpeciesAvailable(speciesAvailable);
-                                break;
-                            case 2:
-                                pokemon = menu.GetSpeciesChosen(speciesAvailable);
-                                pokemonDetails = pokemonApiService.GetPokemonDetails(speciesAvailable[pokemon]);
-                                menu.ShowPokemonDetails(pokemonDetails);
-                                break;
-                            case 3:
-                                menu.ShowSpeciesAvailable(speciesAvailable);
-                                pokemon = menu.GetSpeciesChosen(speciesAvailable);
-                                pokemonDetails = pokemonApiService.GetPokemonDetails(speciesAvailable[pokemon]);
-                                menu.ShowPokemonDetails(pokemonDetails);
-                                if (menu.ConfirmAdoption())
-                                {
-                                    adoptedMascots.Add(pokemonDetails);
-                                    Console.WriteLine("Parabéns! Você adotou um " + pokemonDetails.Name + "!");
-                                    Console.WriteLine("──────────────");
-                                    Console.WriteLine("────▄████▄────");
-                                    Console.WriteLine("──▄████████▄──");
-                                    Console.WriteLine("──██████████──");
-                                    Console.WriteLine("──▀████████▀──");
-                                    Console.WriteLine("─────▀██▀─────");
-                                    Console.WriteLine("──────────────");
-                                }
-                                break;
-                        }
+                        chosenPet.ShowStatus();
                         break;
                     case 2:
-                        menu.ShowAdoptedMascots(adoptedMascots);
+                        chosenPet.Feed();
                         break;
                     case 3:
-                        Console.WriteLine("Obrigado por jogar! Até a próxima.");
-                        return;
+                        chosenPet.Play();
+                        break;
+                    case 4:
+                        exitMenu = true;
+                        break;
                     default:
-                        Console.WriteLine("Opção inválida. Tente novamente.");
+                        Console.WriteLine("Opção inválida. Por favor, escolha novamente.");
                         break;
                 }
             }
         }
+
+        private void ShowPokemonDetails()
+        {
+            var pokemonIndex = _tamagotchiView.GetSpeciesChosen(speciesAvailable);
+            var pokemonDetails = pokemonApiService.GetPokemonDetails(speciesAvailable[pokemonIndex]);
+            _tamagotchiView.ShowPokemonDetails(pokemonDetails);
+        }
+
+        private void AdoptPokemon()
+        {
+            _tamagotchiView.ShowSpeciesAvailable(speciesAvailable);
+            var pokemonIndex = _tamagotchiView.GetSpeciesChosen(speciesAvailable);
+            var pokemonDetails = pokemonApiService.GetPokemonDetails(speciesAvailable[pokemonIndex]);
+            _tamagotchiView.ShowPokemonDetails(pokemonDetails);
+
+            if (_tamagotchiView.ConfirmAdoption())
+            {
+                var tamagotchi = new TamagotchiDTO();
+                tamagotchi.UpdateProps(pokemonDetails);
+                _adoptedPets.Add(tamagotchi);
+                _tamagotchiView.DisplayAdoptionMessage(tamagotchi.Name);
+            }
+        }
+
+        private void ShowAdoptedPokemons()
+        {
+            _tamagotchiView.ShowAdoptedMascots(_adoptedPets);
+        }
+
+        private void ExitGame()
+        {
+            Console.WriteLine("Obrigado por jogar! Até a próxima.");
+        }
+
+        #endregion
     }
 }

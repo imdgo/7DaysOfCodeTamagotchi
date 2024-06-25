@@ -1,3 +1,4 @@
+using TamagotchiPokemon.DTOs;
 using TamagotchiPokemon.Models;
 
 namespace TamagotchiPokemon.Views
@@ -76,7 +77,7 @@ namespace TamagotchiPokemon.Views
 
             return escolha - 1;
         }
-        public void ShowAdoptedMascots(List<PokemonDetailsResult> adoptedMascots)
+        public void ShowAdoptedMascots(List<TamagotchiDTO> adoptedMascots)
         {
             if (adoptedMascots.Count == 0)
             {
@@ -115,6 +116,39 @@ namespace TamagotchiPokemon.Views
 
             string resposta = Console.ReadLine();
             return resposta.ToLower() == "s";
+        }
+
+        public void DisplayAdoptionMessage(string pokemonName)
+        {
+            Console.WriteLine($"Parabéns! Você adotou um {pokemonName}!");
+            Console.WriteLine("──────────────");
+            Console.WriteLine("────▄████▄────");
+            Console.WriteLine("──▄████████▄──");
+            Console.WriteLine("──██████████──");
+            Console.WriteLine("──▀████████▀──");
+            Console.WriteLine("─────▀██▀─────");
+            Console.WriteLine("──────────────");
+        }
+
+        public void ShowInteractionMenu()
+        {
+            Console.WriteLine("\n ──────────────");
+            Console.WriteLine("Menu de Interação:");
+            Console.WriteLine("1. Saber como o mascote está");
+            Console.WriteLine("2. Alimentar o mascote");
+            Console.WriteLine("3. Brincar com o mascote");
+            Console.WriteLine("4. Voltar");
+            Console.Write("Escolha uma opção: ");
+        }
+
+        public int GetPlayerChoice(int maxOpcao)
+        {
+            int escolha;
+            while (!int.TryParse(Console.ReadLine(), out escolha) || escolha < 1 || escolha > maxOpcao)
+            {
+                Console.Write($"Escolha inválida. Por favor, escolha uma opção entre 1 e {maxOpcao}: ");
+            }
+            return escolha;
         }
     }
 }
