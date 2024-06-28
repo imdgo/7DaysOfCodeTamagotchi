@@ -20,6 +20,9 @@ Refatorar o sistema para ficar de acordo com o padrão MVC, com Model, View e Co
 ### Dia 5
 Desenvolver interações do jogador com seus mascotes. Lidar com atributos e poder realmente brincar com seus pokémons.
 
+### Dia 6
+Resolver um problema comum na vida de um desenvolvedor back-end: o mapeamento de propriedades de um objeto para outro. Buscar na documentação de uma biblioteca a melhor maneira de fazer isso.
+
 ## Tecnologias Utilizadas
 - C#
 - API do Pokémon
