@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TamagotchiPokemon.Models;
 
 namespace TamagotchiPokemon.DTOs
 {
-    public class TamagotchiDTO : PokemonDetailsResult
+    public class TamagotchiDTO
     {
-        public string Name { get; set; }
-        public string Height { get; set; }
-        public string Weight { get; set; }
         public int FoodStatus { get; private set; }
         public int Mood { get; private set; }
         public int Energy { get; private set; }
         public int HealthStatus { get; private set; }
+
+        public string Name { get; set; }
+        public string Height { get; set; }
+        public string Weight { get; set; }
+
+        public List<Ability> Abilities { get; set; }
+
 
         public TamagotchiDTO()
         {
@@ -24,14 +27,6 @@ namespace TamagotchiPokemon.DTOs
             Mood = rand.Next(11);
             Energy = rand.Next(11);
             HealthStatus = rand.Next(11);
-        }
-
-        public void UpdateProps(PokemonDetailsResult pokemonDetailsResult)
-        {
-            Name = pokemonDetailsResult.Name;
-            Height = pokemonDetailsResult.Height;
-            Weight = pokemonDetailsResult.Weight;
-            Abilities = pokemonDetailsResult.Abilities;
         }
 
         internal void Feed()
@@ -66,6 +61,11 @@ namespace TamagotchiPokemon.DTOs
             HealthStatus = Math.Min(HealthStatus + 1, 10);
 
             Console.WriteLine("Mascote Amado!");
+        }
+
+        public class Ability
+        {
+            public string Name { get; set; }
         }
     }
 }

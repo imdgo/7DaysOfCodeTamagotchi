@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AutoMapper;
+using Newtonsoft.Json;
 using TamagotchiPokemon.DTOs;
 using TamagotchiPokemon.Models;
 using TamagotchiPokemon.Service;
@@ -14,6 +15,7 @@ namespace TamagotchiPokemon.Controllers
         private readonly TamagotchiView _tamagotchiView;
         private readonly PokemonApiService pokemonApiService;
         private readonly List<PokemonResult> speciesAvailable;
+        private readonly IMapper mapper;
 
         #endregion
 
@@ -21,6 +23,9 @@ namespace TamagotchiPokemon.Controllers
 
         public TamagotchiController()
         {
+            MapperConfiguration config = new (cfg => { cfg.AddProfile<AutoMapperProfile>();});
+            mapper = config.CreateMapper();
+
             _tamagotchiView = new TamagotchiView();
             pokemonApiService = new PokemonApiService();
 
@@ -153,8 +158,7 @@ namespace TamagotchiPokemon.Controllers
 
             if (_tamagotchiView.ConfirmAdoption())
             {
-                var tamagotchi = new TamagotchiDTO();
-                tamagotchi.UpdateProps(pokemonDetails);
+                TamagotchiDTO tamagotchi = mapper.Map<TamagotchiDTO>(pokemonDetails);
                 _adoptedPets.Add(tamagotchi);
                 _tamagotchiView.DisplayAdoptionMessage(tamagotchi.Name);
             }

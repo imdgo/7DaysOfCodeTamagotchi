@@ -1,4 +1,7 @@
 ﻿using TamagotchiPokemon.Controllers;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace TamagotchiPokemon
 {
