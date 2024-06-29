@@ -13,32 +13,63 @@ namespace TamagotchiPokemon.Service
     {
         public List<PokemonResult> GetPokemonSpecies()
         {
-            // Obter a lista de espécies de Pokémons
-            var client = new RestClient("https://pokeapi.co/api/v2/pokemon-species/");
-            var request = new RestRequest("", Method.Get);
-            var response = client.Execute(request);
-
-            if (!response.IsSuccessful)
+            try
             {
-                Console.WriteLine("Erro ao obter a lista de espécies de Pokémons.");               
+                // Obter a lista de espécies de Pokémons
+                var client = new RestClient("https://pokeapi.co/api/v2/pokemon-species/");
+                var request = new RestRequest("", Method.Get);
+                var response = client.Execute(request);
+
+                if (!response.IsSuccessful)
+                {
+                    Console.WriteLine("Erro ao obter a lista de espécies de Pokémons.");
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<PokemonSpeciesResult>(response.Content).Results;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Erro de solicitação: {e.Message}");
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Erro inesperado: {e.Message}");
+                return null;
             }
 
-            return JsonConvert.DeserializeObject<PokemonSpeciesResult>(response.Content).Results;
         }
 
         public PokemonDetailsResult GetPokemonDetails(PokemonResult chosenPokemon)
         {
-            // Obter detalhes do pokemon escolhido
-            var client = new RestClient($"https://pokeapi.co/api/v2/pokemon/{chosenPokemon.Name}");
-            var request = new RestRequest("", Method.Get);
-            var response = client.Execute(request);
-
-            if (!response.IsSuccessful)
+            try
             {
-                Console.WriteLine("Erro ao obter as características do Pokémon escolhido.");
+                // Obter detalhes do pokemon escolhido
+                var client = new RestClient($"https://pokeapi.co/api/v2/pokemon/{chosenPokemon.Name}");
+                var request = new RestRequest("", Method.Get);
+                var response = client.Execute(request);
+
+                if (!response.IsSuccessful)
+                {
+                    Console.WriteLine("Erro ao obter as características do Pokémon escolhido.");
+                    return null;
+                }
+
+                return JsonConvert.DeserializeObject<PokemonDetailsResult>(response.Content);
             }
 
-            return JsonConvert.DeserializeObject<PokemonDetailsResult>(response.Content);
+
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Erro de solicitação: {e.Message}");
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Erro inesperado: {e.Message}");
+                return null;
+            }
 
         }
 
