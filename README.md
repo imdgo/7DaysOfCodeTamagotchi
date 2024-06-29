@@ -23,6 +23,9 @@ Desenvolver interações do jogador com seus mascotes. Lidar com atributos e pod
 ### Dia 6
 Resolver um problema comum na vida de um desenvolvedor back-end: o mapeamento de propriedades de um objeto para outro. Buscar na documentação de uma biblioteca a melhor maneira de fazer isso.
 
+### Dia 7
+Tratar erros de entradas de dados de usuários. Publicar a aplicação para que outras pessoas possam utilizá-la. Fechar com chave de ouro!
+
 ## Tecnologias Utilizadas
 - C#
 - API do Pokémon
